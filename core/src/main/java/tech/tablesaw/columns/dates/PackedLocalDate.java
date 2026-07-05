@@ -136,6 +136,11 @@ public class PackedLocalDate {
   }
 
   public static Month getMonth(int packedDate) {
+
+    if (packedDate == DateColumnType.missingValueIndicator()) {
+      throw new IllegalArgumentException("Cannot get Month for missing value");
+    }
+
     return Month.of(getMonthValue(packedDate));
   }
 
