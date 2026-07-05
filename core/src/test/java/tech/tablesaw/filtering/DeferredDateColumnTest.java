@@ -17,6 +17,7 @@ package tech.tablesaw.filtering;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.LocalDate;
+import java.time.Month;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import tech.tablesaw.api.DateColumn;
@@ -32,10 +33,12 @@ public class DeferredDateColumnTest {
   public void setUp() {
     // Surgical dataset covering Boundary Values and Partitions
     DateColumn col = DateColumn.create("dateCol");
-    col.append(LocalDate.of(2020, 1, 1)); // 0: First day of year / Q1 / January / Wednesday
-    col.append(LocalDate.of(2020, 2, 29)); // 1: Leap year / Q1 / February / Saturday
-    col.append(LocalDate.of(2020, 6, 15)); // 2: Mid year / Q2 / June / Monday
-    col.append(LocalDate.of(2020, 12, 31)); // 3: Last day of year / Q4 / December / Thursday
+    col.append(
+        LocalDate.of(2020, Month.JANUARY, 1)); // 0: First day of year / Q1 / January / Wednesday
+    col.append(LocalDate.of(2020, Month.FEBRUARY, 29)); // 1: Leap year / Q1 / February / Saturday
+    col.append(LocalDate.of(2020, Month.JUNE, 15)); // 2: Mid year / Q2 / June / Monday
+    col.append(
+        LocalDate.of(2020, Month.DECEMBER, 31)); // 3: Last day of year / Q4 / December / Thursday
     col.appendMissing(); // 4: Missing value
 
     table = Table.create("DummyTable", col);
@@ -48,7 +51,7 @@ public class DeferredDateColumnTest {
 
   @Test
   public void testComparisons() {
-    LocalDate pivot = LocalDate.of(2020, 6, 15);
+    LocalDate pivot = LocalDate.of(2020, Month.JUNE, 15);
 
     // isBefore
     Selection selBefore = deferredCol.isBefore(pivot).apply(table);
@@ -70,8 +73,8 @@ public class DeferredDateColumnTest {
     assertFalse(deferredCol.isEqualTo(pivot).apply(table).contains(0));
 
     // isBetweenExcluding / isBetweenIncluding
-    LocalDate start = LocalDate.of(2020, 1, 1);
-    LocalDate end = LocalDate.of(2020, 6, 15);
+    LocalDate start = LocalDate.of(2020, Month.JANUARY, 1);
+    LocalDate end = LocalDate.of(2020, Month.JUNE, 15);
 
     Selection selBetweenEx = deferredCol.isBetweenExcluding(start, end).apply(table);
     assertFalse(selBetweenEx.contains(0)); // Start is exclusive
