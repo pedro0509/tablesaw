@@ -77,7 +77,7 @@ public class LogicalFilterCoverageTest {
   // =================================================================================
 
   @Test
-  public void testAnd_AllAndAll() {
+  public void testAndAllAndAll() {
     And andFilter = new And(selectAll, selectAll);
     Selection result = andFilter.apply(dummyTable);
     assertArrayEquals(
@@ -85,7 +85,7 @@ public class LogicalFilterCoverageTest {
   }
 
   @Test
-  public void testAnd_Overlap() {
+  public void testAndOverlap() {
     And andFilter = new And(select012, select123);
     Selection result = andFilter.apply(dummyTable);
     assertArrayEquals(
@@ -95,7 +95,7 @@ public class LogicalFilterCoverageTest {
   }
 
   @Test
-  public void testAnd_NoOverlap() {
+  public void testAndNoOverlap() {
     And andFilter = new And(select01, select23);
     Selection result = andFilter.apply(dummyTable);
     assertTrue(result.isEmpty(), "P6: Filtros sem sobreposição devem retornar vazio");
@@ -106,7 +106,7 @@ public class LogicalFilterCoverageTest {
   // =================================================================================
 
   @Test
-  public void testOr_Overlap() {
+  public void testOrOverlap() {
     Or orFilter = new Or(select012, select123);
     Selection result = orFilter.apply(dummyTable);
     assertArrayEquals(
@@ -116,7 +116,7 @@ public class LogicalFilterCoverageTest {
   }
 
   @Test
-  public void testOr_NoOverlap() {
+  public void testOrNoOverlap() {
     Or orFilter = new Or(select01, select23);
     Selection result = orFilter.apply(dummyTable);
     assertArrayEquals(
@@ -130,14 +130,14 @@ public class LogicalFilterCoverageTest {
   // =================================================================================
 
   @Test
-  public void testNot_All() {
+  public void testNotAll() {
     Not notFilter = new Not(selectAll);
     Selection result = notFilter.apply(dummyTable);
     assertTrue(result.isEmpty(), "P1: Not(Todos) deve ser Vazio");
   }
 
   @Test
-  public void testNot_None() {
+  public void testNotNone() {
     Not notFilter = new Not(selectNone);
     Selection result = notFilter.apply(dummyTable);
     assertArrayEquals(
@@ -147,7 +147,7 @@ public class LogicalFilterCoverageTest {
   }
 
   @Test
-  public void testNot_Partial() {
+  public void testNotPartial() {
     Not notFilter = new Not(select02);
     Selection result = notFilter.apply(dummyTable);
     assertArrayEquals(
@@ -157,7 +157,7 @@ public class LogicalFilterCoverageTest {
   }
 
   @Test
-  public void testNot_DoubleNegation() {
+  public void testNotDoubleNegation() {
     Not doubleNotFilter = new Not(new Not(select01));
     Selection result = doubleNotFilter.apply(dummyTable);
     assertArrayEquals(

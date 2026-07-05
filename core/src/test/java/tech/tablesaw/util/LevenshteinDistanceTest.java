@@ -37,7 +37,6 @@ class LevenshteinDistanceTest {
 
   @Test
   void testConstructorWithNegativeThreshold() {
-    // Covers the branch where threshold != null AND threshold < 0 (Throws Exception)
     assertThrows(
         IllegalArgumentException.class,
         () -> {
@@ -47,21 +46,18 @@ class LevenshteinDistanceTest {
 
   @Test
   void testConstructorWithPositiveThreshold() {
-    // Covers the branch where threshold != null AND threshold < 0 is false (Success)
     LevenshteinDistance ld = new LevenshteinDistance(5);
     assertEquals(5, ld.getThreshold());
   }
 
   @Test
   void testConstructorWithNullThreshold() {
-    // Covers the branch where threshold == null
     LevenshteinDistance ld = new LevenshteinDistance(null);
     assertNull(ld.getThreshold());
   }
 
   @Test
   void testLimitedCompareWithNullStrings() {
-    // Covers the missed branches in lines 149-151 (left == null || right == null)
     LevenshteinDistance ld = new LevenshteinDistance(5);
 
     assertThrows(
@@ -85,8 +81,6 @@ class LevenshteinDistanceTest {
 
   @Test
   void testGetDefaultInstanceReturnsSingleton() {
-    // Validates if the default constructor via getDefaultInstance returns the same instance without
-    // a threshold
     LevenshteinDistance ld1 = LevenshteinDistance.getDefaultInstance();
     LevenshteinDistance ld2 = LevenshteinDistance.getDefaultInstance();
 
@@ -163,7 +157,6 @@ class LevenshteinDistanceTest {
 
   @Test
   void testUnlimitedCompareWithNullStrings() {
-    // Covers lines 318-319: left == null || right == null in unlimitedCompare
     LevenshteinDistance ldUnlimited = new LevenshteinDistance(); // No threshold limit
 
     assertThrows(IllegalArgumentException.class, () -> ldUnlimited.apply(null, "a"));
@@ -172,7 +165,6 @@ class LevenshteinDistanceTest {
 
   @Test
   void testLimitedCompareWithEmptyStrings() {
-    // Covers lines 211-214: n == 0 and m == 0 in limitedCompare, including threshold limits
     LevenshteinDistance ld0 = new LevenshteinDistance(0);
     LevenshteinDistance ld1 = new LevenshteinDistance(1);
 
@@ -187,7 +179,6 @@ class LevenshteinDistanceTest {
 
   @Test
   void testLimitedCompareWithLeftLongerThanRight() {
-    // Covers lines 217-223: if (n > m) -> Swap optimization
     LevenshteinDistance ld = new LevenshteinDistance(5);
     // "abcd" (n=4) > "ab" (m=2)
     assertEquals(2, ld.apply("abcd", "ab"));
@@ -195,7 +186,6 @@ class LevenshteinDistanceTest {
 
   @Test
   void testLimitedCompareWithMaxIntegerThreshold() {
-    // Covers line 247: if (j > Integer.MAX_VALUE - threshold)
     LevenshteinDistance ld = new LevenshteinDistance(Integer.MAX_VALUE);
     assertEquals(1, ld.apply("a", "b"));
   }

@@ -245,7 +245,7 @@ public class PackedLocalDate {
 
   public static boolean isDayOfWeek(int packedDate, DayOfWeek dayOfWeek) {
     DayOfWeek dow = getDayOfWeek(packedDate);
-    return dayOfWeek == dow;
+    return dayOfWeek.equals(dow);
   }
 
   public static boolean isSunday(int packedDate) {
