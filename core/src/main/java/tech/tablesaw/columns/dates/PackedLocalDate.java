@@ -126,9 +126,7 @@ public class PackedLocalDate {
   }
 
   public static int getDayOfYear(int packedDate) {
-    return getMonth(packedDate).firstDayOfYear(isLeapYear(packedDate))
-        + getDayOfMonth(packedDate)
-        - 1;
+    return getMonth(packedDate).firstDayOfYear(isLeapYear(packedDate));
   }
 
   public static boolean isLeapYear(int packedDate) {
@@ -136,11 +134,6 @@ public class PackedLocalDate {
   }
 
   public static Month getMonth(int packedDate) {
-
-    if (packedDate == DateColumnType.missingValueIndicator()) {
-      throw new IllegalArgumentException("Cannot get Month for missing value");
-    }
-
     return Month.of(getMonthValue(packedDate));
   }
 
@@ -288,51 +281,54 @@ public class PackedLocalDate {
   }
 
   public static boolean isInJanuary(int packedDate) {
-    return getMonth(packedDate) == JANUARY;
+    return packedDate != DateColumnType.missingValueIndicator()
+        && packedDate != DateColumnType.missingValueIndicator()
+        && getMonth(packedDate) == JANUARY;
   }
 
   public static boolean isInFebruary(int packedDate) {
-    return getMonth(packedDate) == FEBRUARY;
+    return packedDate != DateColumnType.missingValueIndicator() && getMonth(packedDate) == FEBRUARY;
   }
 
   public static boolean isInMarch(int packedDate) {
-    return getMonth(packedDate) == MARCH;
+    return packedDate != DateColumnType.missingValueIndicator() && getMonth(packedDate) == MARCH;
   }
 
   public static boolean isInApril(int packedDate) {
-    return getMonth(packedDate) == APRIL;
+    return packedDate != DateColumnType.missingValueIndicator() && getMonth(packedDate) == APRIL;
   }
 
   public static boolean isInMay(int packedDate) {
-    return getMonth(packedDate) == MAY;
+    return packedDate != DateColumnType.missingValueIndicator() && getMonth(packedDate) == MAY;
   }
 
   public static boolean isInJune(int packedDate) {
-    return getMonth(packedDate) == JUNE;
+    return packedDate != DateColumnType.missingValueIndicator() && getMonth(packedDate) == JUNE;
   }
 
   public static boolean isInJuly(int packedDate) {
-    return getMonth(packedDate) == JULY;
+    return packedDate != DateColumnType.missingValueIndicator() && getMonth(packedDate) == JULY;
   }
 
   public static boolean isInAugust(int packedDate) {
-    return getMonth(packedDate) == AUGUST;
+    return packedDate != DateColumnType.missingValueIndicator() && getMonth(packedDate) == AUGUST;
   }
 
   public static boolean isInSeptember(int packedDate) {
-    return getMonth(packedDate) == SEPTEMBER;
+    return packedDate != DateColumnType.missingValueIndicator()
+        && getMonth(packedDate) == SEPTEMBER;
   }
 
   public static boolean isInOctober(int packedDate) {
-    return getMonth(packedDate) == OCTOBER;
+    return packedDate != DateColumnType.missingValueIndicator() && getMonth(packedDate) == OCTOBER;
   }
 
   public static boolean isInNovember(int packedDate) {
-    return getMonth(packedDate) == NOVEMBER;
+    return packedDate != DateColumnType.missingValueIndicator() && getMonth(packedDate) == NOVEMBER;
   }
 
   public static boolean isInDecember(int packedDate) {
-    return getMonth(packedDate) == DECEMBER;
+    return packedDate != DateColumnType.missingValueIndicator() && getMonth(packedDate) == DECEMBER;
   }
 
   public static boolean isLastDayOfMonth(int packedDate) {
