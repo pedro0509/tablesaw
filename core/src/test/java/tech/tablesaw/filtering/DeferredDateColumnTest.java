@@ -85,6 +85,10 @@ public class DeferredDateColumnTest {
     assertTrue(selBetweenInc.contains(0)); // Start is inclusive
     assertTrue(selBetweenInc.contains(1)); // Inside
     assertTrue(selBetweenInc.contains(2)); // End is inclusive
+
+    // isNotEqualTo
+    assertTrue(deferredCol.isNotEqualTo(pivot).apply(table).contains(0));
+    assertFalse(deferredCol.isNotEqualTo(pivot).apply(table).contains(2));
   }
 
   // =================================================================================
@@ -106,6 +110,19 @@ public class DeferredDateColumnTest {
     assertTrue(deferredCol.isMonday().apply(table).contains(2));
     assertTrue(deferredCol.isThursday().apply(table).contains(3));
     assertFalse(deferredCol.isWednesday().apply(table).contains(2));
+
+    assertTrue(deferredCol.isInMarch().apply(table).isEmpty());
+    assertTrue(deferredCol.isInApril().apply(table).isEmpty());
+    assertTrue(deferredCol.isInMay().apply(table).isEmpty());
+    assertTrue(deferredCol.isInJuly().apply(table).isEmpty());
+    assertTrue(deferredCol.isInAugust().apply(table).isEmpty());
+    assertTrue(deferredCol.isInSeptember().apply(table).isEmpty());
+    assertTrue(deferredCol.isInOctober().apply(table).isEmpty());
+    assertTrue(deferredCol.isInNovember().apply(table).isEmpty());
+
+    assertTrue(deferredCol.isSunday().apply(table).isEmpty());
+    assertTrue(deferredCol.isTuesday().apply(table).isEmpty());
+    assertTrue(deferredCol.isFriday().apply(table).isEmpty());
   }
 
   // =================================================================================
@@ -135,6 +152,8 @@ public class DeferredDateColumnTest {
 
     Selection year2021 = deferredCol.isInYear(2021).apply(table);
     assertTrue(year2021.isEmpty());
+
+    assertTrue(deferredCol.isInQ3().apply(table).isEmpty());
   }
 
   // =================================================================================
@@ -164,5 +183,30 @@ public class DeferredDateColumnTest {
     assertTrue(notMissing.contains(2));
     assertTrue(notMissing.contains(3));
     assertFalse(notMissing.contains(4));
+  }
+
+  // =================================================================================
+  // 5. COLUMN-TO-COLUMN COMPARISON TESTS
+  // =================================================================================
+
+  @Test
+  public void testColumnComparisons() {
+    // Create a second column to compare side-by-side with dateCol
+    DateColumn otherCol = DateColumn.create("otherCol");
+    otherCol.append(LocalDate.of(2020, Month.JANUARY, 1)); // Row 0: Equal to dateCol
+    otherCol.append(LocalDate.of(2020, Month.JANUARY, 1)); // Row 1: Before dateCol (Feb 29)
+    otherCol.append(LocalDate.of(2020, Month.DECEMBER, 31)); // Row 2: After dateCol (Jun 15)
+    otherCol.append(LocalDate.of(2020, Month.DECEMBER, 31)); // Row 3: Equal to dateCol
+    otherCol.appendMissing(); // Row 4: Missing
+
+    table.addColumns(otherCol);
+
+    // Test the 6 remaining white-box methods
+    assertTrue(deferredCol.isEqualTo(otherCol).apply(table).contains(0));
+    assertTrue(deferredCol.isNotEqualTo(otherCol).apply(table).contains(1));
+    assertTrue(deferredCol.isAfter(otherCol).apply(table).contains(1));
+    assertTrue(deferredCol.isBefore(otherCol).apply(table).contains(2));
+    assertTrue(deferredCol.isOnOrAfter(otherCol).apply(table).contains(0));
+    assertTrue(deferredCol.isOnOrBefore(otherCol).apply(table).contains(2));
   }
 }
