@@ -126,7 +126,9 @@ public class PackedLocalDate {
   }
 
   public static int getDayOfYear(int packedDate) {
-    return getMonth(packedDate).firstDayOfYear(isLeapYear(packedDate));
+    return getMonth(packedDate).firstDayOfYear(isLeapYear(packedDate))
+        + getDayOfMonth(packedDate)
+        - 1;
   }
 
   public static boolean isLeapYear(int packedDate) {
